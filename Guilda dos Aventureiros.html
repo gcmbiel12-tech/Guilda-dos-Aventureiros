@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guilda dos Aventureiros</title>
+<style>
+:root{
+  --bg:#f4ede0; --panel:#fffaf1; --text:#2b2014; --sub:#6b5a40; --accent:#9a5b2e;
+  --gold:#b8860b; --rep:#4a6fa5; --scroll:#8a2be2; --border:#d9c9a3; --danger:#b03a3a; --ok:#3a7a3a;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#17120c; --panel:#241c13; --text:#f0e2c8; --sub:#b7a07e; --accent:#d08a4e;
+    --gold:#e3b23c; --rep:#7fa8e0; --scroll:#b78bff; --border:#3a2f1f; --danger:#e06060; --ok:#6fcf6f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17120c; --panel:#241c13; --text:#f0e2c8; --sub:#b7a07e; --accent:#d08a4e;
+  --gold:#e3b23c; --rep:#7fa8e0; --scroll:#b78bff; --border:#3a2f1f; --danger:#e06060; --ok:#6fcf6f;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Georgia,'Times New Roman',serif;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+.wrap{max-width:900px;margin:0 auto;padding:14px}
+h1{font-size:1.3em;margin:4px 0 2px;color:var(--accent)}
+h2{font-size:1.02em;margin:0 0 8px;color:var(--accent)}
+.sub{color:var(--sub);font-size:.82em;margin-bottom:10px}
+.stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;font-size:.92em}
+.stats b{color:var(--gold)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.card{border:2px solid var(--border);border-radius:8px;padding:8px;font-size:.82em;cursor:pointer;background:var(--bg)}
+.card.sel{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 15%, var(--bg))}
+.card.busy{opacity:.5;cursor:default}
+.card b{display:block}
+.tag{display:inline-block;font-size:.75em;padding:1px 5px;border-radius:5px;margin-top:3px}
+.tag.Comum{background:#888;color:#fff}.tag.Raro{background:var(--rep);color:#fff}
+.tag.Épico{background:#a349a4;color:#fff}.tag.Lendário{background:var(--scroll);color:#fff}
+button{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:7px 11px;font-family:inherit;cursor:pointer;font-size:.85em}
+button:disabled{opacity:.4;cursor:default}
+.mission{border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:6px;font-size:.85em}
+.mission .bar{height:6px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:4px}
+.mission .fill{height:100%;background:var(--ok)}
+.mission.locked{opacity:.62}
+.mission.campaign{border-color:var(--danger)}
+.section-label{font-size:.75em;text-transform:uppercase;letter-spacing:.08em;color:var(--sub);margin:10px 0 5px}
+.journey{border:1px solid var(--border);border-radius:8px;padding:9px;margin-bottom:7px}
+.journey-track{display:flex;align-items:center;gap:5px;margin:7px 0;overflow:hidden}
+.journey-hero{font-size:1.35em;animation:travel 2s ease-in-out infinite alternate}
+.journey-road{height:3px;background:var(--border);flex:1;min-width:8px}
+@keyframes travel{from{transform:translateX(-2px)}to{transform:translateX(4px)}}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.log{font-size:.8em;color:var(--sub);min-height:1.4em;margin-top:6px;white-space:pre-wrap}
+.small{font-size:.78em;color:var(--sub)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🏰 Guilda dos Aventureiros</h1>
+  <div class="sub">Contrate heróis, monte grupos e mande-os em missões. O tempo corre mesmo enquanto você observa — gerencie com sabedoria.</div>
+
+  <div class="stats">
+    <span>Ouro: <b id="gold">0</b></span>
+    <span>Reputação: <b id="rep">0</b></span>
+    <span>Salão nível: <b id="level">1</b></span>
+    <span>Pergaminhos de Lenda: <b id="scrolls">0</b> (mult x<span id="mult">1.00</span>)</span>
+  </div>
+
+  <div class="panel">
+    <h2>Salão da Guilda</h2>
+    <div class="row">
+      <span class="small">Tamanho máx. de grupo: <b id="partyMax">2</b> | Capacidade de roster: <b id="rosterMax">4</b></span>
+      <button id="upgradeHall">Melhorar Salão (<span id="hallCost">100</span> ouro)</button>
+      <button id="prestigeBtn">Passar o Legado</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Taverna — Recrutar</h2>
+    <div class="grid" id="tavern"></div>
+    <div class="row" style="margin-top:8px"><button id="refreshTavern">Atualizar Taverna (grátis)</button></div>
+  </div>
+
+  <div class="panel">
+    <h2>Seu Roster <span class="small">(clique para selecionar o grupo da missão)</span></h2>
+    <div class="grid" id="roster"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Jornadas em andamento</h2>
+    <div id="journeys"><span class="small">Nenhum grupo está em jornada no momento.</span></div>
+  </div>
+
+  <div class="panel">
+    <h2>Quadro de Missões</h2>
+    <div class="small">Escolha contratos conforme o risco e a força da equipe. Missões ativas aparecem nas jornadas acima.</div>
+    <div id="missions"></div>
+    <div class="log" id="log"></div>
+  </div>
+
+  <div class="panel">
+    <h2>⚔️ Campanha: O Rei Demônio</h2>
+    <div class="small">Uma campanha principal em quatro etapas. Cada vitória abre o próximo capítulo; a derrota não encerra a campanha.</div>
+    <div id="campaign"></div>
+  </div>
+</div>
+<script>
+(function(){
+const CLASSES=['Guerreiro','Mago','Ladino','Clérigo','Arqueiro'];
+const RARITIES=[{name:'Comum',mult:1,cost:30,w:55},{name:'Raro',mult:1.7,cost:90,w:28},{name:'Épico',mult:2.8,cost:220,w:13},{name:'Lendário',mult:4.6,cost:500,w:4}];
+const NAMES=['Thorin','Lyra','Kael','Mira','Dorn','Sana','Fendrel','Yuna','Borin','Vesna','Taryn','Orin','Elowen','Griff','Nessa'];
+class Mission{
+  constructor(config){Object.assign(this,config);}
+  successChance(power){return Math.min(.95,power/this.req*0.85+0.1);}
+  applyRewards(state,multiplier){
+    const gold=Math.round(this.gold*multiplier);
+    state.gold+=gold;state.totalGold+=gold;state.rep+=this.rep;
+    return {gold,campaignAdvanced:false};
+  }
+}
+class CampaignMission extends Mission{
+  constructor(step,config){super(config);this.campaignStep=step;}
+  applyRewards(state,multiplier){
+    const reward=super.applyRewards(state,multiplier);
+    if(this.campaignStep===state.campaignStage){state.campaignStage++;reward.campaignAdvanced=true;}
+    return reward;
+  }
+}
+const MISSIONS=[
+  new Mission({name:'Patrulha na Floresta',dur:15,req:8,gold:35,rep:1,risk:.15}),
+  new Mission({name:'Caçada a Goblins',dur:30,req:16,gold:80,rep:2,risk:.25}),
+  new Mission({name:'Ruínas Antigas',dur:60,req:30,gold:200,rep:4,risk:.35}),
+  new Mission({name:'Covil do Dragão Jovem',dur:120,req:55,gold:500,rep:9,risk:.5}),
+  new Mission({name:'Torre Amaldiçoada',dur:200,req:85,gold:1100,rep:16,risk:.6}),
+];
+const CAMPAIGN=[
+  new CampaignMission(0,{name:'I — As Terras Corrompidas',desc:'Rompa o cerco dos demônios nas fronteiras.',dur:45,req:25,gold:180,rep:5,risk:.25}),
+  new CampaignMission(1,{name:'II — Fortaleza das Cinzas',desc:'Derrote o comandante demoníaco.',dur:90,req:55,gold:450,rep:10,risk:.4}),
+  new CampaignMission(2,{name:'III — O Abismo Rubro',desc:'Atravesse o portal e enfraqueça o exército infernal.',dur:150,req:95,gold:1000,rep:20,risk:.5}),
+  new CampaignMission(3,{name:'IV — Rei Demônio',desc:'A batalha final pelo destino do reino.',dur:240,req:150,gold:2500,rep:50,risk:.65})
+];
+let state={gold:120,rep:0,level:1,scrolls:0,totalGold:0,nextId:1,roster:[],tavern:[],active:[],sel:[],campaignStage:0};
+function restoreMission(saved){
+  if(!saved||typeof saved.name!=='string')return null;
+  if(Number.isInteger(saved.campaignStep)){
+    return CAMPAIGN[saved.campaignStep]||null;
+  }
+  return MISSIONS.find(m=>m.name===saved.name)||null;
+}
+function load(){
+  try{
+    const raw=localStorage.getItem('guildaSave');
+    if(!raw)return;
+    const s=JSON.parse(raw);
+    if(!s||typeof s!=='object')return;
+    state.gold=Number.isFinite(s.gold)&&s.gold>=0?s.gold:state.gold;
+    state.rep=Number.isFinite(s.rep)&&s.rep>=0?s.rep:state.rep;
+    state.level=Number.isInteger(s.level)&&s.level>=1?s.level:state.level;
+    state.scrolls=Number.isInteger(s.scrolls)&&s.scrolls>=0?s.scrolls:state.scrolls;
+    state.totalGold=Number.isFinite(s.totalGold)&&s.totalGold>=0?s.totalGold:state.totalGold;
+    state.nextId=Number.isInteger(s.nextId)&&s.nextId>=1?s.nextId:state.nextId;
+    state.campaignStage=Number.isInteger(s.campaignStage)?Math.max(0,Math.min(CAMPAIGN.length,s.campaignStage)):state.campaignStage;
+    state.roster=Array.isArray(s.roster)?s.roster.filter(a=>a&&Number.isInteger(a.id)&&a.id>=1&&NAMES.includes(a.name)&&Number.isFinite(a.power)&&a.power>0&&Number.isFinite(a.cost)&&a.cost>=0&&CLASSES.includes(a.cls)&&RARITIES.some(r=>r.name===a.rar)).map(a=>({...a,insured:Boolean(a.insured),status:'idle'})):[];
+    state.tavern=Array.isArray(s.tavern)?s.tavern.filter(a=>a&&Number.isInteger(a.id)&&a.id>=1&&NAMES.includes(a.name)&&Number.isFinite(a.power)&&a.power>0&&Number.isFinite(a.cost)&&a.cost>=0&&CLASSES.includes(a.cls)&&RARITIES.some(r=>r.name===a.rar)).map(a=>({...a,insured:Boolean(a.insured),status:'idle'})):[];
+    const rosterIds=new Set(state.roster.map(a=>a.id));
+    const claimedIds=new Set();
+    state.active=Array.isArray(s.active)?s.active.map(a=>{
+      const m=restoreMission(a&&a.m);
+      if(!m||!Array.isArray(a.party)||!Number.isFinite(a.start)||!Number.isFinite(a.dur)||a.dur<=0||!Number.isFinite(a.end)||a.end<a.start)return null;
+      const party=[...new Set(a.party)].filter(id=>rosterIds.has(id)&&!claimedIds.has(id));
+      if(!party.length)return null;
+      party.forEach(id=>claimedIds.add(id));
+      return {m,party,start:a.start,dur:a.dur,end:a.end};
+    }).filter(Boolean):[];
+    const activeIds=new Set(state.active.flatMap(a=>a.party));
+    state.roster.forEach(a=>{if(activeIds.has(a.id))a.status='mission';});
+    state.sel=Array.isArray(s.sel)?s.sel.filter(id=>rosterIds.has(id)&&!activeIds.has(id)):[];
+    const maxId=Math.max(0,...state.roster.map(a=>a.id),...state.tavern.map(a=>a.id));
+    state.nextId=Math.max(state.nextId,maxId+1);
+  }catch(e){
+    console.warn('Não foi possível carregar o salvamento da guilda.',e);
+  }
+}
+function mult(){return 1+state.scrolls*0.15;}
+function save(){
+  try{
+    localStorage.setItem('guildaSave',JSON.stringify({
+      version:2,gold:state.gold,rep:state.rep,level:state.level,scrolls:state.scrolls,
+      totalGold:state.totalGold,nextId:state.nextId,roster:state.roster,tavern:state.tavern,
+      active:state.active,sel:state.sel,campaignStage:state.campaignStage
+    }));
+  }catch(e){
+    console.warn('Não foi possível salvar o progresso da guilda.',e);
+  }
+}
+load();
+function partyMax(){return Math.min(5,1+state.level);}
+function rosterMax(){return 3+state.level*2;}
+function rollRarity(){
+  const tot=RARITIES.reduce((a,r)=>a+r.w,0);let r=Math.random()*tot;
+  for(const x of RARITIES){if(r<x.w)return x;r-=x.w;}
+  return RARITIES[0];
+}
+function makeAdv(forSale){
+  const rar=rollRarity();
+  const cls=CLASSES[Math.floor(Math.random()*CLASSES.length)];
+  const name=NAMES[Math.floor(Math.random()*NAMES.length)];
+  const power=Math.round((6+Math.random()*6)*rar.mult*mult());
+  return {id:state.nextId++,name,cls,rar:rar.name,power,cost:Math.round(rar.cost*(1+state.level*0.3)),insured:false,status:'idle',hpTimer:0};
+}
+function refreshTavern(){state.tavern=[makeAdv(),makeAdv(),makeAdv(),makeAdv()];save();render();}
+document.getElementById('refreshTavern').onclick=refreshTavern;
+if(!state.tavern.length)refreshTavern();
+else render();
+
+function log(m){document.getElementById('log').textContent=m;}
+
+document.getElementById('upgradeHall').onclick=()=>{
+  const cost=hallCost();
+  if(state.gold<cost)return;
+  state.gold-=cost;state.level++;
+  save();
+  log('Salão da guilda melhorou para nível '+state.level+'!');
+  render();
+};
+function hallCost(){return Math.round(100*Math.pow(1.6,state.level-1));}
+
+document.getElementById('prestigeBtn').onclick=()=>{
+  if(state.totalGold<400){log('Precisa de pelo menos 400 ouro ganho total para passar o legado.');return;}
+  const gain=Math.floor(Math.sqrt(state.totalGold/40));
+  state.scrolls+=gain;state.gold=120;state.totalGold=0;state.rep=0;state.level=1;state.roster=[];state.active=[];state.sel=[];
+  save();refreshTavern();
+  log('Você passa o comando! +'+gain+' Pergaminhos de Lenda. Multiplicador agora x'+mult().toFixed(2));
+};
+
+function toggleSel(id){
+  const adv=state.roster.find(a=>a.id===id);
+  if(!adv||adv.status!=='idle')return;
+  const i=state.sel.indexOf(id);
+  if(i>=0)state.sel.splice(i,1);
+  else{if(state.sel.length>=partyMax()){log('Grupo cheio para o nível atual do salão.');return;}state.sel.push(id);}
+  save();
+  render();
+}
+function insure(id){
+  const adv=state.roster.find(a=>a.id===id);
+  if(!adv||adv.status!=='idle'||adv.insured)return;
+  const cost=Math.round(adv.power*2);
+  if(state.gold<cost){log('Ouro insuficiente para seguro.');return;}
+  state.gold-=cost;adv.insured=true;log(adv.name+' agora está segurado(a).');save();render();
+}
+function hire(idx){
+  const adv=state.tavern[idx];
+  if(!adv)return;
+  if(state.gold<adv.cost){log('Ouro insuficiente para recrutar.');return;}
+  if(state.roster.length>=rosterMax()){log('Roster cheio. Melhore o Salão da Guilda.');return;}
+  state.gold-=adv.cost;state.roster.push(adv);state.tavern.splice(idx,1);
+  log(adv.name+' (' +adv.rar+ ' ' +adv.cls+ ') se juntou à guilda!');
+  save();
+  render();
+}
+function dispatch(m){
+  if(!m||!Number.isFinite(m.dur)||m.dur<=0)return;
+  if(state.sel.length===0){log('Selecione ao menos um aventureiro no roster.');return;}
+  const party=state.sel.map(id=>state.roster.find(a=>a.id===id)).filter(a=>a&&a.status==='idle');
+  if(!party.length||party.length!==state.sel.length){log('O grupo selecionado não está mais disponível.');state.sel=[];save();render();return;}
+  party.forEach(a=>a.status='mission');
+  state.active.push({m,party:party.map(a=>a.id),end:Date.now()+m.dur*1000,start:Date.now(),dur:m.dur*1000});
+  state.sel=[];
+  log('Grupo despachado para: '+m.name);
+  save();
+  render();
+}
+function resolveMission(mi){
+  const am=state.active[mi];
+  const party=am.party.map(id=>state.roster.find(a=>a.id===id)).filter(Boolean);
+  const power=party.reduce((s,a)=>s+a.power,0);
+  const success=Math.random()<am.m.successChance(power);
+  if(success){
+    const reward=am.m.applyRewards(state,mult());
+    if(reward.campaignAdvanced){
+      log(state.campaignStage===CAMPAIGN.length?'VITÓRIA! O Rei Demônio foi derrotado! A lenda da guilda será lembrada para sempre.':'Vitória na campanha! Etapa concluída: '+am.m.name+'. Próxima etapa desbloqueada.');
+    } else {
+      log('Sucesso em "'+am.m.name+'"! +'+reward.gold+' ouro, +'+am.m.rep+' reputação.');
+    }
+  } else {
+    let msg='Fracasso em "'+am.m.name+'". ';
+    party.forEach(a=>{
+      if(Math.random()<am.m.risk){
+        if(a.insured){a.insured=false;msg+=a.name+' ficou gravemente ferido mas sobreviveu (seguro usado). ';}
+        else{state.roster=state.roster.filter(r=>r.id!==a.id);msg+=a.name+' não resistiu... ';return;}
+      }
+    });
+    log(msg);
+  }
+  party.forEach(a=>{if(state.roster.includes(a))a.status='idle';});
+  state.active.splice(mi,1);
+  save();
+}
+
+function render(){
+  document.getElementById('gold').textContent=Math.floor(state.gold);
+  document.getElementById('rep').textContent=state.rep;
+  document.getElementById('level').textContent=state.level;
+  document.getElementById('scrolls').textContent=state.scrolls;
+  document.getElementById('mult').textContent=mult().toFixed(2);
+  document.getElementById('partyMax').textContent=partyMax();
+  document.getElementById('rosterMax').textContent=rosterMax();
+  document.getElementById('hallCost').textContent=hallCost();
+  document.getElementById('upgradeHall').disabled=state.gold<hallCost();
+  document.getElementById('prestigeBtn').disabled=state.totalGold<400;
+
+  const tav=document.getElementById('tavern');tav.innerHTML='';
+  state.tavern.forEach((a,i)=>{
+    const d=document.createElement('div');d.className='card';
+    d.innerHTML='<b>'+a.name+'</b>'+a.cls+' <span class="tag '+a.rar+'">'+a.rar+'</span><br>Poder: '+a.power+'<br>Custo: '+a.cost+' ouro';
+    d.onclick=()=>hire(i);
+    tav.appendChild(d);
+  });
+
+  const ros=document.getElementById('roster');ros.innerHTML='';
+  state.roster.forEach(a=>{
+    const d=document.createElement('div');
+    d.className='card'+(state.sel.includes(a.id)?' sel':'')+(a.status!=='idle'?' busy':'');
+    d.innerHTML='<b>'+a.name+'</b>'+a.cls+' <span class="tag '+a.rar+'">'+a.rar+'</span><br>Poder: '+a.power+
+      (a.status==='mission'?'<br><span class="small">Em missão...</span>':'<br>'+(a.insured?'<span class="small">🛡️ Segurado</span>':''));
+    if(a.status==='idle'){
+      d.onclick=()=>toggleSel(a.id);
+      if(!a.insured){
+        const btn=document.createElement('button');btn.textContent='Segurar ('+Math.round(a.power*2)+'g)';btn.style.marginTop='4px';
+        btn.onclick=(e)=>{e.stopPropagation();insure(a.id);};
+        d.appendChild(btn);
+      }
+    }
+    ros.appendChild(d);
+  });
+
+  const journeyDiv=document.getElementById('journeys');journeyDiv.innerHTML='';
+  if(!state.active.length)journeyDiv.innerHTML='<span class="small">Nenhum grupo está em jornada no momento. Selecione aventureiros e despache uma missão.</span>';
+  state.active.forEach(active=>{
+    const party=active.party.map(id=>state.roster.find(a=>a.id===id)).filter(Boolean);
+    const pct=Math.min(100,100*(Date.now()-active.start)/active.dur);
+    const elapsed=Date.now()-active.start;
+    const phase=pct<20?'Partindo da guilda...':pct<65?'Explorando a região e enfrentando perigos...':pct<95?'Concluindo o objetivo da missão...':'Retornando à guilda...';
+    const heroes=party.map(a=>({Guerreiro:'⚔️',Mago:'🪄',Ladino:'🗡️',Clérigo:'✨',Arqueiro:'🏹'}[a.cls]||'🧭')).join(' ');
+    const d=document.createElement('div');d.className='journey';
+    d.innerHTML='<b>'+active.m.name+'</b><div class="journey-track"><span>🏰</span><span class="journey-road"></span><span class="journey-hero">'+heroes+'</span><span class="journey-road"></span><span>'+(active.m.campaignStep===3?'👑':'📍')+'</span></div><div class="small">'+phase+' ('+Math.floor(pct)+'%)</div><div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><div class="small">Equipe: '+party.map(a=>a.name).join(', ')+'</div>';
+    journeyDiv.appendChild(d);
+  });
+
+  const mdiv=document.getElementById('missions');mdiv.innerHTML='';
+  const groups=[{name:'Baixo risco',items:MISSIONS.filter(m=>m.risk<.25)},{name:'Risco moderado',items:MISSIONS.filter(m=>m.risk>=.25&&m.risk<.45)},{name:'Alto risco',items:MISSIONS.filter(m=>m.risk>=.45)}];
+  groups.forEach(group=>{
+    if(!group.items.length)return;
+    const label=document.createElement('div');label.className='section-label';label.textContent=group.name;mdiv.appendChild(label);
+    group.items.forEach(m=>{
+      const d=document.createElement('div');d.className='mission';
+      const active=state.active.find(a=>a.m===m);
+      let inner='<div class="row"><b>'+m.name+'</b><span class="small">Poder req.: '+m.req+' | Duração: '+m.dur+'s | Recompensa: '+m.gold+' ouro, +'+m.rep+' reputação | Risco: '+Math.round(m.risk*100)+'%</span></div>';
+      if(active){const pct=Math.min(100,100*(Date.now()-active.start)/active.dur);inner+='<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><span class="small">Em andamento...</span>';}
+      else inner+='<button>Despachar grupo selecionado</button>';
+      d.innerHTML=inner;if(!active)d.querySelector('button').onclick=()=>dispatch(m);mdiv.appendChild(d);
+    });
+  });
+
+  const campaignDiv=document.getElementById('campaign');campaignDiv.innerHTML='';
+  CAMPAIGN.forEach((m,i)=>{
+    const done=i<state.campaignStage,unlocked=i===state.campaignStage,active=state.active.find(a=>a.m.campaignStep===i);
+    const d=document.createElement('div');d.className='mission campaign'+(!done&&!unlocked?' locked':'');
+    let inner='<div class="row"><b>'+(done?'✓ ':'')+m.name+'</b><span class="small">Poder req.: '+m.req+' | Duração: '+m.dur+'s | Recompensa: '+m.gold+' ouro, +'+m.rep+' reputação | Risco: '+Math.round(m.risk*100)+'%</span></div><div class="small">'+m.desc+'</div>';
+    if(done)inner+='<div class="small">Etapa concluída</div>';
+    else if(active){const pct=Math.min(100,100*(Date.now()-active.start)/active.dur);inner+='<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><span class="small">Jornada da campanha em andamento...</span>';}
+    else if(unlocked)inner+='<button>Iniciar etapa da campanha</button>';
+    else inner+='<div class="small">Bloqueada — conclua a etapa anterior.</div>';
+    d.innerHTML=inner;
+    if(unlocked&&!active&&!done)d.querySelector('button').onclick=()=>dispatch(m);
+    campaignDiv.appendChild(d);
+  });
+  if(state.campaignStage>=CAMPAIGN.length){const win=document.createElement('div');win.className='mission';win.innerHTML='<b>🏆 O Rei Demônio foi derrotado!</b><div class="small">A campanha principal foi concluída. A guilda entrou para a história.</div>';campaignDiv.appendChild(win);}
+}
+function loop(){
+  for(let i=state.active.length-1;i>=0;i--){
+    if(Date.now()>=state.active[i].end)resolveMission(i);
+  }
+  render();
+  setTimeout(loop,400);
+}
+loop();
+setInterval(save,5000);
+window.addEventListener('pagehide',save);
+})();
+</script>
+</body>
+</html>
