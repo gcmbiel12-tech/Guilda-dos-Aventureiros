@@ -1,0 +1,23 @@
+{
+  "name": "guilda-dos-aventureiros",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Testes de regressÃ£o do jogo Guilda dos Aventureiros.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "test": "node tests/check-syntax.cjs && node tests/domain-unit.cjs && node tests/guild-service-unit.cjs && node tests/journey-service-unit.cjs && node tests/game-loop-unit.cjs && node tests/economy-balance.cjs && node tests/persistence-service-unit.cjs && node tests/sede-navigation-unit.cjs && node tests/expedition-view-unit.cjs && node tests/sprite-view-unit.cjs && node tests/guilda-regression.cjs",
+    "test:guild": "node tests/guild-service-unit.cjs",
+    "test:journey": "node tests/journey-service-unit.cjs",
+    "test:persistence": "node tests/persistence-service-unit.cjs",
+    "test:syntax": "node tests/check-syntax.cjs",
+    "test:domain": "node tests/domain-unit.cjs",
+    "test:regression": "node tests/guilda-regression.cjs",
+    "test:loop": "node tests/game-loop-unit.cjs",
+    "test:economy": "node tests/economy-balance.cjs"
+  },
+  "devDependencies": {
+    "puppeteer": "25.16.0"
+  }
+}

@@ -1,0 +1,26 @@
+# Dependências e saídas locais
+node_modules/
+.vercel/
+coverage/
+test-results/
+playwright-report/
+
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Backups locais preservados fora do fluxo de publicacao
+Planejamento/Arquivo/Backups/
+
+# Sistema operacional e editores
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

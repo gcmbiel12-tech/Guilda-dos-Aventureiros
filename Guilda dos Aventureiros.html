@@ -37,12 +37,36 @@ h2{font-size:1.02em;margin:0 0 8px;color:var(--accent)}
 .card.sel{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 15%, var(--bg))}
 .card.busy{opacity:.5;cursor:default}
 .card b{display:block}
+.card .npc-heading{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.npc-copy{min-width:0;flex:1}
+.npc-copy b{line-height:1.2;margin-bottom:2px}
+.npc-dialogue{margin:2px 0 7px 48px;padding:5px 7px;border:1px solid var(--border);border-radius:8px;background:color-mix(in srgb,var(--accent) 7%,var(--panel));color:var(--sub);font-size:.92em;line-height:1.25}
+.npc-avatar{display:inline-grid;place-items:center;flex:0 0 auto;width:40px;height:40px;border:1px solid var(--border);border-radius:50%;background:color-mix(in srgb,var(--accent) 13%,var(--panel));font-size:1.55rem;line-height:1;transform-origin:50% 85%;animation-delay:var(--npc-delay,0s)}
+.npc-avatar--recruit{animation:npc-sway 3.6s ease-in-out infinite;box-shadow:0 2px 0 color-mix(in srgb,var(--accent) 22%,transparent)}
+.npc-avatar--idle{animation:npc-breathe 3.2s ease-in-out infinite}
+.npc-avatar--journey{width:30px;height:30px;font-size:1.2rem;border-style:dashed;animation:npc-march .72s ease-in-out infinite}
+.npc-sprite{display:inline-block;flex:0 0 auto;width:34px;height:34px;background-repeat:no-repeat;background-size:272px 34px;image-rendering:pixelated;filter:drop-shadow(0 2px 2px #1118)}
+.npc-sprite--idle{background-image:url("NPC/Guerreiro/Guerreiro, ocioso.png");animation:sprite-walk 1.2s steps(8) infinite;animation-delay:var(--sprite-delay,0ms)}
+.npc-sprite--attack{background-image:url("NPC/Guerreiro/Guerreiro, ataque.png");animation:sprite-attack .8s steps(8) infinite;animation-delay:var(--sprite-delay,0ms)}
+.npc-sprite--death{background-image:url("NPC/Guerreiro/Guerreiro, morrendo.png");animation:sprite-death 1.2s steps(8) 1 forwards;animation-delay:var(--sprite-delay,0ms)}
+@keyframes sprite-walk{from{background-position:0 0}to{background-position:-272px 0}}
+@keyframes sprite-attack{from{background-position:0 0}to{background-position:-272px 0}}
+@keyframes sprite-death{from{background-position:0 0}to{background-position:-272px 0}}
+@media(prefers-reduced-motion:reduce){.npc-sprite{animation:none!important;background-position:0 0!important}.npc-sprite--death{background-position:-272px 0!important}}
+@keyframes npc-breathe{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(2deg)}}
+@keyframes npc-sway{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(3deg)}}
+@keyframes npc-march{0%,100%{transform:translateY(1px) rotate(-5deg)}50%{transform:translateY(-3px) rotate(5deg)}}
+@media (prefers-reduced-motion:reduce){.npc-avatar,.journey-hero{animation:none!important;transform:none!important}}
 .tag{display:inline-block;font-size:.75em;padding:1px 5px;border-radius:5px;margin-top:3px}
 .tag.Comum{background:#888;color:#fff}.tag.Raro{background:var(--rep);color:#fff}
 .tag.Épico{background:#a349a4;color:#fff}.tag.Lendário{background:var(--scroll);color:#fff}
 button{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:7px 11px;font-family:inherit;cursor:pointer;font-size:.85em}
 button:disabled{opacity:.4;cursor:default}
+button:focus-visible,.card[role="button"]:focus-visible{outline:3px solid var(--rep);outline-offset:3px}
+.card[role="button"]{cursor:pointer}
+.card[role="button"]:focus-visible{border-color:var(--rep)}
 .mission{border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:6px;font-size:.85em}
+.mission-assessment{margin-top:7px;padding:6px 8px;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--panel));line-height:1.4}
 .mission .bar{height:6px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:4px}
 .mission .fill{height:100%;background:var(--ok)}
 .mission.locked{opacity:.62}
@@ -52,6 +76,38 @@ button:disabled{opacity:.4;cursor:default}
 .journey-track{display:flex;align-items:center;gap:5px;margin:7px 0;overflow:hidden}
 .journey-hero{font-size:1.35em;animation:travel 2s ease-in-out infinite alternate}
 .journey-road{height:3px;background:var(--border);flex:1;min-width:8px}
+.expedition-scene{position:relative;isolation:isolate;overflow:hidden;min-height:142px;margin:9px 0 7px;padding:13px 12px 10px;border:1px solid color-mix(in srgb,var(--accent) 35%,var(--border));border-radius:9px;background:linear-gradient(180deg,#263b42 0%,#52634e 58%,#29392e 100%);color:#fff7df}
+.expedition-scene::before,.expedition-scene::after{content:"";position:absolute;z-index:-1;pointer-events:none}
+.expedition-scene::before{inset:0;background:radial-gradient(ellipse at 78% 16%,#f3d58b55 0 7%,transparent 33%),linear-gradient(165deg,transparent 38%,#172b2b88 39% 55%,transparent 56%),linear-gradient(15deg,#14251f99 0 24%,transparent 25% 62%,#182d2c66 63%)}
+.expedition-scene::after{width:180px;height:180px;right:-42px;bottom:-130px;border:1px solid #f8e4b522;border-radius:50%;box-shadow:0 0 0 18px #f8e4b510,0 0 0 38px #f8e4b508}
+.expedition-scene[data-atmosphere="ruins"]{background:linear-gradient(180deg,#4b5155,#77705d 58%,#343a37)}
+.expedition-scene[data-atmosphere="dark"],.expedition-scene[data-atmosphere="citadel"]{background:linear-gradient(180deg,#292b42,#563e43 58%,#211e2b)}
+.expedition-scene[data-atmosphere="road"]{background:linear-gradient(180deg,#617d86,#8a916b 58%,#4b6348)}
+.expedition-scene__top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.72em;letter-spacing:.08em;text-transform:uppercase;color:#f7dfae}
+.expedition-scene__title{font-weight:bold;font-size:1.05em;letter-spacing:0;text-transform:none;color:#fff8e8}
+.expedition-scene__landmark{font-size:2.2rem;filter:drop-shadow(0 3px 2px #10182088);position:absolute;right:13%;top:29px}
+.expedition-scene__party{display:flex;align-items:center;gap:4px;min-height:38px;margin-top:13px;position:relative;z-index:1}
+.expedition-scene__party .npc-avatar{width:34px;height:34px;background:#fff4d9;border-color:#fff4d9;color:#2b2014;box-shadow:0 2px 5px #1118}
+.expedition-scene__trail{height:3px;max-width:72%;margin:7px 0 7px 2px;border-radius:3px;background:linear-gradient(90deg,#f1d69b,#fff4d9aa,transparent);position:relative}
+.expedition-scene__trail::after{content:"";position:absolute;left:var(--travel-progress,0%);top:50%;width:9px;height:9px;border-radius:50%;background:#fff2c7;box-shadow:0 0 10px #fff2c7;transform:translate(-50%,-50%)}
+.expedition-scene__beat{font-size:.82em;font-weight:bold;text-shadow:0 1px 3px #15221c;position:relative;z-index:1}
+ .expedition-scene__caption{font-size:.72em;color:#f1e5c9;margin-top:3px;position:relative;z-index:1}
+.expedition-scene__encounter{display:inline-block;margin-top:5px;padding:3px 7px;border:1px solid #f2d6a866;border-radius:5px;background:#17152188;color:#ffe2aa;font-size:.75em;position:relative;z-index:1}
+.expedition-result{border:1px solid var(--accent);border-left:5px solid var(--ok);border-radius:9px;padding:11px;margin:0 0 9px;background:color-mix(in srgb,var(--ok) 10%,var(--panel));animation:result-arrive .45s ease-out}
+.expedition-result[data-success="false"]{border-left-color:var(--danger);background:color-mix(in srgb,var(--danger) 9%,var(--panel))}
+.expedition-result strong{display:block;color:var(--accent);font-size:1em;margin-bottom:3px}
+.expedition-result small{color:var(--sub)}
+.expedition-result__casualties{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.expedition-result__casualty{display:inline-flex;align-items:center;gap:5px;color:var(--sub);font-size:.82em}
+.expedition-result__casualty .npc-sprite{width:34px;height:34px}
+@keyframes result-arrive{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.expedition-result{animation:none}}
+.expedition-scene__spark{position:absolute;right:27%;bottom:24px;width:4px;height:4px;border-radius:50%;background:#ffe7a5;box-shadow:0 0 9px 3px #ffe7a566;animation:scene-glimmer 2.4s ease-in-out infinite alternate}
+@keyframes scene-glimmer{from{opacity:.2;transform:translateY(3px)}to{opacity:1;transform:translateY(-5px)}}
+.journey .bar{height:7px}
+.journey .fill{transition:width .35s linear}
+@media(max-width:420px){.expedition-scene{min-height:132px;padding:10px}.expedition-scene__landmark{right:8%;top:27px}.expedition-scene__party .npc-avatar{width:30px;height:30px}}
+@media(prefers-reduced-motion:reduce){.expedition-scene__spark{animation:none}.journey .fill{transition:none}}
 @keyframes travel{from{transform:translateX(-2px)}to{transform:translateX(4px)}}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .log{font-size:.8em;color:var(--sub);min-height:1.4em;margin-top:6px;white-space:pre-wrap}
@@ -99,7 +155,7 @@ button:disabled{opacity:.4;cursor:default}
     <h2>Quadro de Missões</h2>
     <div class="small">Escolha contratos conforme o risco e a força da equipe. Missões ativas aparecem nas jornadas acima.</div>
     <div id="missions"></div>
-    <div class="log" id="log"></div>
+    <div class="log" id="log" role="status" aria-live="polite" aria-atomic="true"></div>
   </div>
 
   <div class="panel">
@@ -108,111 +164,32 @@ button:disabled{opacity:.4;cursor:default}
     <div id="campaign"></div>
   </div>
 </div>
+<script src="guilda-domain.js"></script>
+<script src="guilda-journey.js"></script>
+<script src="guilda-persistence.js"></script>
+<script src="guilda-loop.js"></script>
+<script src="guilda-expedition-view.js"></script>
+<script src="guilda-sprite-view.js"></script>
 <script>
 (function(){
-const CLASSES=['Guerreiro','Mago','Ladino','Clérigo','Arqueiro'];
-const RARITIES=[{name:'Comum',mult:1,cost:30,w:55},{name:'Raro',mult:1.7,cost:90,w:28},{name:'Épico',mult:2.8,cost:220,w:13},{name:'Lendário',mult:4.6,cost:500,w:4}];
-const NAMES=['Thorin','Lyra','Kael','Mira','Dorn','Sana','Fendrel','Yuna','Borin','Vesna','Taryn','Orin','Elowen','Griff','Nessa'];
-class Mission{
-  constructor(config){Object.assign(this,config);}
-  successChance(power){return Math.min(.95,power/this.req*0.85+0.1);}
-  applyRewards(state,multiplier){
-    const gold=Math.round(this.gold*multiplier);
-    state.gold+=gold;state.totalGold+=gold;state.rep+=this.rep;
-    return {gold,campaignAdvanced:false};
-  }
-}
-class CampaignMission extends Mission{
-  constructor(step,config){super(config);this.campaignStep=step;}
-  applyRewards(state,multiplier){
-    const reward=super.applyRewards(state,multiplier);
-    if(this.campaignStep===state.campaignStage){state.campaignStage++;reward.campaignAdvanced=true;}
-    return reward;
-  }
-}
-const MISSIONS=[
-  new Mission({name:'Patrulha na Floresta',dur:15,req:8,gold:35,rep:1,risk:.15}),
-  new Mission({name:'Caçada a Goblins',dur:30,req:16,gold:80,rep:2,risk:.25}),
-  new Mission({name:'Ruínas Antigas',dur:60,req:30,gold:200,rep:4,risk:.35}),
-  new Mission({name:'Covil do Dragão Jovem',dur:120,req:55,gold:500,rep:9,risk:.5}),
-  new Mission({name:'Torre Amaldiçoada',dur:200,req:85,gold:1100,rep:16,risk:.6}),
-];
-const CAMPAIGN=[
-  new CampaignMission(0,{name:'I — As Terras Corrompidas',desc:'Rompa o cerco dos demônios nas fronteiras.',dur:45,req:25,gold:180,rep:5,risk:.25}),
-  new CampaignMission(1,{name:'II — Fortaleza das Cinzas',desc:'Derrote o comandante demoníaco.',dur:90,req:55,gold:450,rep:10,risk:.4}),
-  new CampaignMission(2,{name:'III — O Abismo Rubro',desc:'Atravesse o portal e enfraqueça o exército infernal.',dur:150,req:95,gold:1000,rep:20,risk:.5}),
-  new CampaignMission(3,{name:'IV — Rei Demônio',desc:'A batalha final pelo destino do reino.',dur:240,req:150,gold:2500,rep:50,risk:.65})
-];
+const { Adventurer, GuildService, MISSIONS, CAMPAIGN } = window.GuildaDomain;
+const { JourneyService } = window.GuildaJourney;
+const { PersistenceService } = window.GuildaPersistence;
+const { GameLoop } = window.GuildaLoop;
+const { snapshot: expeditionSnapshot, outcome: expeditionOutcome } = window.GuildaExpeditionView;
 let state={gold:120,rep:0,level:1,scrolls:0,totalGold:0,nextId:1,roster:[],tavern:[],active:[],sel:[],campaignStage:0};
-function restoreMission(saved){
-  if(!saved||typeof saved.name!=='string')return null;
-  if(Number.isInteger(saved.campaignStep)){
-    return CAMPAIGN[saved.campaignStep]||null;
-  }
-  return MISSIONS.find(m=>m.name===saved.name)||null;
-}
-function load(){
-  try{
-    const raw=localStorage.getItem('guildaSave');
-    if(!raw)return;
-    const s=JSON.parse(raw);
-    if(!s||typeof s!=='object')return;
-    state.gold=Number.isFinite(s.gold)&&s.gold>=0?s.gold:state.gold;
-    state.rep=Number.isFinite(s.rep)&&s.rep>=0?s.rep:state.rep;
-    state.level=Number.isInteger(s.level)&&s.level>=1?s.level:state.level;
-    state.scrolls=Number.isInteger(s.scrolls)&&s.scrolls>=0?s.scrolls:state.scrolls;
-    state.totalGold=Number.isFinite(s.totalGold)&&s.totalGold>=0?s.totalGold:state.totalGold;
-    state.nextId=Number.isInteger(s.nextId)&&s.nextId>=1?s.nextId:state.nextId;
-    state.campaignStage=Number.isInteger(s.campaignStage)?Math.max(0,Math.min(CAMPAIGN.length,s.campaignStage)):state.campaignStage;
-    state.roster=Array.isArray(s.roster)?s.roster.filter(a=>a&&Number.isInteger(a.id)&&a.id>=1&&NAMES.includes(a.name)&&Number.isFinite(a.power)&&a.power>0&&Number.isFinite(a.cost)&&a.cost>=0&&CLASSES.includes(a.cls)&&RARITIES.some(r=>r.name===a.rar)).map(a=>({...a,insured:Boolean(a.insured),status:'idle'})):[];
-    state.tavern=Array.isArray(s.tavern)?s.tavern.filter(a=>a&&Number.isInteger(a.id)&&a.id>=1&&NAMES.includes(a.name)&&Number.isFinite(a.power)&&a.power>0&&Number.isFinite(a.cost)&&a.cost>=0&&CLASSES.includes(a.cls)&&RARITIES.some(r=>r.name===a.rar)).map(a=>({...a,insured:Boolean(a.insured),status:'idle'})):[];
-    const rosterIds=new Set(state.roster.map(a=>a.id));
-    const claimedIds=new Set();
-    state.active=Array.isArray(s.active)?s.active.map(a=>{
-      const m=restoreMission(a&&a.m);
-      if(!m||!Array.isArray(a.party)||!Number.isFinite(a.start)||!Number.isFinite(a.dur)||a.dur<=0||!Number.isFinite(a.end)||a.end<a.start)return null;
-      const party=[...new Set(a.party)].filter(id=>rosterIds.has(id)&&!claimedIds.has(id));
-      if(!party.length)return null;
-      party.forEach(id=>claimedIds.add(id));
-      return {m,party,start:a.start,dur:a.dur,end:a.end};
-    }).filter(Boolean):[];
-    const activeIds=new Set(state.active.flatMap(a=>a.party));
-    state.roster.forEach(a=>{if(activeIds.has(a.id))a.status='mission';});
-    state.sel=Array.isArray(s.sel)?s.sel.filter(id=>rosterIds.has(id)&&!activeIds.has(id)):[];
-    const maxId=Math.max(0,...state.roster.map(a=>a.id),...state.tavern.map(a=>a.id));
-    state.nextId=Math.max(state.nextId,maxId+1);
-  }catch(e){
-    console.warn('Não foi possível carregar o salvamento da guilda.',e);
-  }
-}
-function mult(){return 1+state.scrolls*0.15;}
-function save(){
-  try{
-    localStorage.setItem('guildaSave',JSON.stringify({
-      version:2,gold:state.gold,rep:state.rep,level:state.level,scrolls:state.scrolls,
-      totalGold:state.totalGold,nextId:state.nextId,roster:state.roster,tavern:state.tavern,
-      active:state.active,sel:state.sel,campaignStage:state.campaignStage
-    }));
-  }catch(e){
-    console.warn('Não foi possível salvar o progresso da guilda.',e);
-  }
-}
+const guildService=new GuildService(state);
+
+const persistence=new PersistenceService({Adventurer,missions:MISSIONS,campaign:CAMPAIGN});
+function load(){persistence.load(state);}
+function mult(){return guildService.multiplier();}
+function save(){persistence.save(state);}
+const journeyService=new JourneyService({state,save,render,log,multiplier:mult,campaign:CAMPAIGN});
 load();
-function partyMax(){return Math.min(5,1+state.level);}
-function rosterMax(){return 3+state.level*2;}
-function rollRarity(){
-  const tot=RARITIES.reduce((a,r)=>a+r.w,0);let r=Math.random()*tot;
-  for(const x of RARITIES){if(r<x.w)return x;r-=x.w;}
-  return RARITIES[0];
-}
-function makeAdv(forSale){
-  const rar=rollRarity();
-  const cls=CLASSES[Math.floor(Math.random()*CLASSES.length)];
-  const name=NAMES[Math.floor(Math.random()*NAMES.length)];
-  const power=Math.round((6+Math.random()*6)*rar.mult*mult());
-  return {id:state.nextId++,name,cls,rar:rar.name,power,cost:Math.round(rar.cost*(1+state.level*0.3)),insured:false,status:'idle',hpTimer:0};
-}
-function refreshTavern(){state.tavern=[makeAdv(),makeAdv(),makeAdv(),makeAdv()];save();render();}
+function partyMax(){return guildService.partyMax();}
+function rosterMax(){return guildService.rosterMax();}
+function hallCost(){return guildService.hallCost();}
+function refreshTavern(){guildService.refreshTavern();save();render();}
 document.getElementById('refreshTavern').onclick=refreshTavern;
 if(!state.tavern.length)refreshTavern();
 else render();
@@ -220,86 +197,96 @@ else render();
 function log(m){document.getElementById('log').textContent=m;}
 
 document.getElementById('upgradeHall').onclick=()=>{
-  const cost=hallCost();
-  if(state.gold<cost)return;
-  state.gold-=cost;state.level++;
+  const result=guildService.upgradeHall();
+  if(!result.ok)return;
   save();
-  log('Salão da guilda melhorou para nível '+state.level+'!');
+  log('Salão da guilda melhorou para nível '+result.level+'!');
   render();
 };
-function hallCost(){return Math.round(100*Math.pow(1.6,state.level-1));}
 
 document.getElementById('prestigeBtn').onclick=()=>{
-  if(state.totalGold<400){log('Precisa de pelo menos 400 ouro ganho total para passar o legado.');return;}
-  const gain=Math.floor(Math.sqrt(state.totalGold/40));
-  state.scrolls+=gain;state.gold=120;state.totalGold=0;state.rep=0;state.level=1;state.roster=[];state.active=[];state.sel=[];
+  const result=guildService.prestige();
+  if(!result.ok){log('Precisa de pelo menos 400 ouro ganho total para passar o legado.');return;}
   save();refreshTavern();
-  log('Você passa o comando! +'+gain+' Pergaminhos de Lenda. Multiplicador agora x'+mult().toFixed(2));
+  log('Você passa o comando! +'+result.gain+' Pergaminhos de Lenda. Multiplicador agora x'+mult().toFixed(2));
 };
 
 function toggleSel(id){
-  const adv=state.roster.find(a=>a.id===id);
-  if(!adv||adv.status!=='idle')return;
-  const i=state.sel.indexOf(id);
-  if(i>=0)state.sel.splice(i,1);
-  else{if(state.sel.length>=partyMax()){log('Grupo cheio para o nível atual do salão.');return;}state.sel.push(id);}
+  const result=guildService.toggleSelection(id);
+  if(!result.ok){if(result.code==='party-full')log('Grupo cheio para o nível atual do salão.');return;}
   save();
   render();
 }
 function insure(id){
-  const adv=state.roster.find(a=>a.id===id);
-  if(!adv||adv.status!=='idle'||adv.insured)return;
-  const cost=Math.round(adv.power*2);
-  if(state.gold<cost){log('Ouro insuficiente para seguro.');return;}
-  state.gold-=cost;adv.insured=true;log(adv.name+' agora está segurado(a).');save();render();
+  const result=guildService.insure(id);
+  if(!result.ok){if(result.code==='insufficient-gold')log('Ouro insuficiente para seguro.');return;}
+  log(result.adventurer.name+' agora está segurado(a).');save();render();
 }
 function hire(idx){
-  const adv=state.tavern[idx];
-  if(!adv)return;
-  if(state.gold<adv.cost){log('Ouro insuficiente para recrutar.');return;}
-  if(state.roster.length>=rosterMax()){log('Roster cheio. Melhore o Salão da Guilda.');return;}
-  state.gold-=adv.cost;state.roster.push(adv);state.tavern.splice(idx,1);
+  const result=guildService.hire(idx);
+  if(!result.ok){
+    if(result.code==='insufficient-gold')log('Ouro insuficiente para recrutar.');
+    else if(result.code==='roster-full')log('Roster cheio. Melhore o Salão da Guilda.');
+    return;
+  }
+  const adv=result.adventurer;
   log(adv.name+' (' +adv.rar+ ' ' +adv.cls+ ') se juntou à guilda!');
   save();
   render();
 }
-function dispatch(m){
-  if(!m||!Number.isFinite(m.dur)||m.dur<=0)return;
-  if(state.sel.length===0){log('Selecione ao menos um aventureiro no roster.');return;}
-  const party=state.sel.map(id=>state.roster.find(a=>a.id===id)).filter(a=>a&&a.status==='idle');
-  if(!party.length||party.length!==state.sel.length){log('O grupo selecionado não está mais disponível.');state.sel=[];save();render();return;}
-  party.forEach(a=>a.status='mission');
-  state.active.push({m,party:party.map(a=>a.id),end:Date.now()+m.dur*1000,start:Date.now(),dur:m.dur*1000});
-  state.sel=[];
-  log('Grupo despachado para: '+m.name);
-  save();
-  render();
-}
+function dispatch(m){journeyService.dispatch(m);}
 function resolveMission(mi){
-  const am=state.active[mi];
-  const party=am.party.map(id=>state.roster.find(a=>a.id===id)).filter(Boolean);
-  const power=party.reduce((s,a)=>s+a.power,0);
-  const success=Math.random()<am.m.successChance(power);
-  if(success){
-    const reward=am.m.applyRewards(state,mult());
-    if(reward.campaignAdvanced){
-      log(state.campaignStage===CAMPAIGN.length?'VITÓRIA! O Rei Demônio foi derrotado! A lenda da guilda será lembrada para sempre.':'Vitória na campanha! Etapa concluída: '+am.m.name+'. Próxima etapa desbloqueada.');
-    } else {
-      log('Sucesso em "'+am.m.name+'"! +'+reward.gold+' ouro, +'+am.m.rep+' reputação.');
-    }
-  } else {
-    let msg='Fracasso em "'+am.m.name+'". ';
-    party.forEach(a=>{
-      if(Math.random()<am.m.risk){
-        if(a.insured){a.insured=false;msg+=a.name+' ficou gravemente ferido mas sobreviveu (seguro usado). ';}
-        else{state.roster=state.roster.filter(r=>r.id!==a.id);msg+=a.name+' não resistiu... ';return;}
-      }
-    });
-    log(msg);
+  const active=state.active[mi];
+  if(!active)return false;
+  const partyBefore=active.party.map(id=>state.roster.find(a=>a.id===id)).filter(Boolean);
+  const before={campaignStage:state.campaignStage,gold:state.gold,rep:state.rep};
+  const resolved=journeyService.resolveMission(mi);
+  if(resolved){
+    state.lastExpeditionResult=expeditionOutcome({mission:active.m,campaignStageBefore:before.campaignStage,campaignStageAfter:state.campaignStage,goldBefore:before.gold,goldAfter:state.gold,repBefore:before.rep,repAfter:state.rep});
+    state.lastExpeditionResult.casualties=partyBefore.filter(a=>!state.roster.some(current=>current.id===a.id)).map(a=>({id:a.id,name:a.name,cls:a.cls}));
   }
-  party.forEach(a=>{if(state.roster.includes(a))a.status='idle';});
-  state.active.splice(mi,1);
-  save();
+  return resolved;
+}
+function npcAvatar(a,motion,action,now){
+  const sprite=GuildaSpriteView.avatar(a,action||'idle',now===undefined?Date.now():now);
+  if(sprite)return '<span class="'+sprite.className+'" style="'+sprite.style+'" role="img" aria-label="'+(sprite.action==='death'?'Guerreiro derrotado':'Guerreiro em animação')+'"></span>';
+  const cls=String(a.cls||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const icons={Guerreiro:'&#9876;',Mago:'&#129497;',Ladino:'&#129399;',Clerigo:'&#129497;',Arqueiro:'&#127993;'};
+  const icon=icons[cls]||'&#129497;';
+  const delay=((Number(a.id)||0)%6)*-.37;
+  return '<span class="npc-avatar npc-avatar--'+motion+'" style="--npc-delay:'+delay+'s" aria-hidden="true">'+icon+'</span>';
+}
+
+function makeCardInteractive(card,action,label,pressed){
+  card.setAttribute('role','button');
+  card.tabIndex=0;
+  card.setAttribute('aria-label',label);
+  if(pressed!==undefined)card.setAttribute('aria-pressed',String(pressed));
+  card.addEventListener('click',action);
+  card.addEventListener('keydown',event=>{
+    if(event.target!==card)return;
+    if(event.key==='Enter'||event.key===' '){event.preventDefault();action();}
+  });
+}
+
+function npcDialogue(a,motion){
+  const lines={
+    recruit:['Buscando uma equipe...','Pronto para novas aventuras.','Ouvi dizer que h\u00e1 trabalho por aqui.'],
+    idle:['Descansado e pronto para partir.','A guilda pode contar comigo.','Qual ser\u00e1 nosso pr\u00f3ximo contrato?'],
+    journey:['Miss\u00e3o em andamento.','Avan\u00e7ando com cautela!','Estamos mais perto do objetivo.']
+  };
+  const options=lines[motion]||lines.idle;
+  const line=options[(Number(a.id)||0)%options.length];
+  return '<div class="npc-dialogue" data-motion="'+motion+'">'+line+'</div>';
+}
+
+function missionAssessment(m){
+  const party=state.roster.filter(a=>state.sel.includes(a.id)&&a.isIdle());
+  const risk='Risco individual após fracasso: '+Math.round(m.risk*100)+'% de chance de perda por aventureiro; o seguro evita a perda e é consumido.';
+  if(!party.length)return '<div class="mission-assessment small">Selecione aventureiros para calcular o poder do grupo e a chance de sucesso.<br>'+risk+'</div>';
+  const power=party.reduce((sum,a)=>sum+a.power,0);
+  const chance=Math.round(m.successChance(power)*100);
+  return '<div class="mission-assessment small"><b>Poder selecionado:</b> '+power+' / '+m.req+' · <b>Chance de sucesso:</b> '+chance+'%<br>'+risk+'</div>';
 }
 
 function render(){
@@ -317,21 +304,24 @@ function render(){
   const tav=document.getElementById('tavern');tav.innerHTML='';
   state.tavern.forEach((a,i)=>{
     const d=document.createElement('div');d.className='card';
-    d.innerHTML='<b>'+a.name+'</b>'+a.cls+' <span class="tag '+a.rar+'">'+a.rar+'</span><br>Poder: '+a.power+'<br>Custo: '+a.cost+' ouro';
-    d.onclick=()=>hire(i);
+    d.innerHTML='<div class="npc-heading">'+npcAvatar(a,'recruit')+'<div class="npc-copy"><b>'+a.name+'</b>'+a.cls+' <span class="tag '+a.rar+'">'+a.rar+'</span></div></div>Poder: '+a.power+'<br>Custo: '+a.cost+' ouro';
+    d.insertAdjacentHTML('beforeend',npcDialogue(a,'recruit'));
+    makeCardInteractive(d,()=>hire(i),'Recrutar '+a.name+', '+a.rar+' '+a.cls+', custo '+a.cost+' ouro');
     tav.appendChild(d);
   });
 
   const ros=document.getElementById('roster');ros.innerHTML='';
   state.roster.forEach(a=>{
     const d=document.createElement('div');
-    d.className='card'+(state.sel.includes(a.id)?' sel':'')+(a.status!=='idle'?' busy':'');
-    d.innerHTML='<b>'+a.name+'</b>'+a.cls+' <span class="tag '+a.rar+'">'+a.rar+'</span><br>Poder: '+a.power+
-      (a.status==='mission'?'<br><span class="small">Em missão...</span>':'<br>'+(a.insured?'<span class="small">🛡️ Segurado</span>':''));
-    if(a.status==='idle'){
-      d.onclick=()=>toggleSel(a.id);
+    d.className='card'+(state.sel.includes(a.id)?' sel':'')+(!a.isIdle()?' busy':'');
+    const motion=a.isOnMission()?'journey':'idle';
+    d.innerHTML='<div class="npc-heading">'+npcAvatar(a,a.isOnMission()?'journey':'idle')+'<div class="npc-copy"><b>'+a.name+'</b>'+a.cls+' <span class="tag '+a.rar+'">'+a.rar+'</span></div></div>Poder: '+a.power+
+      (a.isOnMission()?'<br><span class="small">Em missão...</span>':'<br>'+(a.insured?'<span class="small">🛡️ Segurado</span>':''));
+    d.insertAdjacentHTML('beforeend',npcDialogue(a,motion));
+    if(a.isIdle()){
+      makeCardInteractive(d,()=>toggleSel(a.id),'Selecionar '+a.name+', '+a.rar+' '+a.cls,state.sel.includes(a.id));
       if(!a.insured){
-        const btn=document.createElement('button');btn.textContent='Segurar ('+Math.round(a.power*2)+'g)';btn.style.marginTop='4px';
+        const btn=document.createElement('button');btn.type='button';btn.textContent='Segurar ('+a.insuranceCost+'g)';btn.setAttribute('aria-label','Contratar seguro para '+a.name+' por '+a.insuranceCost+' ouro');btn.style.marginTop='4px';
         btn.onclick=(e)=>{e.stopPropagation();insure(a.id);};
         d.appendChild(btn);
       }
@@ -340,15 +330,36 @@ function render(){
   });
 
   const journeyDiv=document.getElementById('journeys');journeyDiv.innerHTML='';
-  if(!state.active.length)journeyDiv.innerHTML='<span class="small">Nenhum grupo está em jornada no momento. Selecione aventureiros e despache uma missão.</span>';
+  const lastResult=state.lastExpeditionResult;
+  if(lastResult && Date.now()-lastResult.timestamp<10000){
+    const result=document.createElement('div');result.className='expedition-result';result.dataset.success=String(lastResult.success);
+    result.setAttribute('role','status');
+    result.innerHTML='<strong>'+(lastResult.finalVictory?'🏆 ':lastResult.success?'✓ ':'⚠ ')+lastResult.title+'</strong><small>'+lastResult.missionName+(lastResult.isCampaign?' · Campanha':' · Expedição')+'</small>';
+    if(Array.isArray(lastResult.casualties)&&lastResult.casualties.length){
+      const casualties=document.createElement('div');casualties.className='expedition-result__casualties';casualties.setAttribute('aria-label','Aventureiros perdidos nesta expedição');
+      lastResult.casualties.forEach(casualty=>{
+        const item=document.createElement('span');item.className='expedition-result__casualty';
+        item.insertAdjacentHTML('afterbegin',npcAvatar(casualty,'idle','death',Math.max(0,Date.now()-lastResult.timestamp)));
+        const name=document.createElement('span');name.textContent=casualty.name;item.appendChild(name);casualties.appendChild(item);
+      });
+      result.appendChild(casualties);
+    }
+    journeyDiv.appendChild(result);
+  }
+  if(!state.active.length){const empty=document.createElement('span');empty.className='small';empty.textContent='Nenhum grupo está em jornada no momento. Selecione aventureiros e despache uma missão.';journeyDiv.appendChild(empty);}
   state.active.forEach(active=>{
     const party=active.party.map(id=>state.roster.find(a=>a.id===id)).filter(Boolean);
-    const pct=Math.min(100,100*(Date.now()-active.start)/active.dur);
-    const elapsed=Date.now()-active.start;
-    const phase=pct<20?'Partindo da guilda...':pct<65?'Explorando a região e enfrentando perigos...':pct<95?'Concluindo o objetivo da missão...':'Retornando à guilda...';
-    const heroes=party.map(a=>({Guerreiro:'⚔️',Mago:'🪄',Ladino:'🗡️',Clérigo:'✨',Arqueiro:'🏹'}[a.cls]||'🧭')).join(' ');
-    const d=document.createElement('div');d.className='journey';
-    d.innerHTML='<b>'+active.m.name+'</b><div class="journey-track"><span>🏰</span><span class="journey-road"></span><span class="journey-hero">'+heroes+'</span><span class="journey-road"></span><span>'+(active.m.campaignStep===3?'👑':'📍')+'</span></div><div class="small">'+phase+' ('+Math.floor(pct)+'%)</div><div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><div class="small">Equipe: '+party.map(a=>a.name).join(', ')+'</div>';
+    const scene=expeditionSnapshot(active,Date.now());
+    const pct=scene.progress;
+    const heroes=party.map(a=>npcAvatar(a,'journey',scene.isConfrontation?'attack':'idle',Date.now())).join(' ');
+    const d=document.createElement('div');d.className='journey'+(scene.isCampaign?' journey--campaign':'');
+    d.innerHTML='<b>'+active.m.name+'</b>'+
+      '<div class="expedition-scene" data-atmosphere="'+scene.atmosphere+'" data-phase="'+scene.phase+'" style="--travel-progress:'+Math.floor(pct)+'%">'+
+      '<div class="expedition-scene__top"><span>'+(scene.isCampaign?'Capítulo '+(scene.campaignStep+1)+' · Campanha':'Expedição em andamento')+'</span><span>'+Math.floor(pct)+'%</span></div>'+
+      '<div class="expedition-scene__title">'+scene.scene.title+'</div><span class="expedition-scene__landmark" aria-hidden="true">'+scene.scene.icon+'</span>'+
+      '<div class="expedition-scene__party">'+heroes+'</div><div class="expedition-scene__trail"></div>'+
+      '<div class="expedition-scene__beat">'+scene.beat+'</div>'+(scene.isConfrontation?'<div class="expedition-scene__encounter">⚔ '+scene.encounter+'</div>':'')+'<div class="expedition-scene__caption">'+scene.phaseLabel+'</div><span class="expedition-scene__spark" aria-hidden="true"></span></div>'+
+      '<div class="bar" aria-label="Progresso da expedição"><div class="fill" style="width:'+pct+'%"></div></div><div class="small">Equipe: '+party.map(a=>a.name).join(', ')+'</div>';
     journeyDiv.appendChild(d);
   });
 
@@ -362,7 +373,7 @@ function render(){
       const active=state.active.find(a=>a.m===m);
       let inner='<div class="row"><b>'+m.name+'</b><span class="small">Poder req.: '+m.req+' | Duração: '+m.dur+'s | Recompensa: '+m.gold+' ouro, +'+m.rep+' reputação | Risco: '+Math.round(m.risk*100)+'%</span></div>';
       if(active){const pct=Math.min(100,100*(Date.now()-active.start)/active.dur);inner+='<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><span class="small">Em andamento...</span>';}
-      else inner+='<button>Despachar grupo selecionado</button>';
+      else {inner+=missionAssessment(m);inner+='<button type="button"'+(state.sel.length?'':' disabled')+'>Despachar grupo selecionado</button>';}
       d.innerHTML=inner;if(!active)d.querySelector('button').onclick=()=>dispatch(m);mdiv.appendChild(d);
     });
   });
@@ -374,7 +385,7 @@ function render(){
     let inner='<div class="row"><b>'+(done?'✓ ':'')+m.name+'</b><span class="small">Poder req.: '+m.req+' | Duração: '+m.dur+'s | Recompensa: '+m.gold+' ouro, +'+m.rep+' reputação | Risco: '+Math.round(m.risk*100)+'%</span></div><div class="small">'+m.desc+'</div>';
     if(done)inner+='<div class="small">Etapa concluída</div>';
     else if(active){const pct=Math.min(100,100*(Date.now()-active.start)/active.dur);inner+='<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><span class="small">Jornada da campanha em andamento...</span>';}
-    else if(unlocked)inner+='<button>Iniciar etapa da campanha</button>';
+    else if(unlocked)inner+=missionAssessment(m)+'<button type="button">Iniciar etapa da campanha</button>';
     else inner+='<div class="small">Bloqueada — conclua a etapa anterior.</div>';
     d.innerHTML=inner;
     if(unlocked&&!active&&!done)d.querySelector('button').onclick=()=>dispatch(m);
@@ -382,14 +393,8 @@ function render(){
   });
   if(state.campaignStage>=CAMPAIGN.length){const win=document.createElement('div');win.className='mission';win.innerHTML='<b>🏆 O Rei Demônio foi derrotado!</b><div class="small">A campanha principal foi concluída. A guilda entrou para a história.</div>';campaignDiv.appendChild(win);}
 }
-function loop(){
-  for(let i=state.active.length-1;i>=0;i--){
-    if(Date.now()>=state.active[i].end)resolveMission(i);
-  }
-  render();
-  setTimeout(loop,400);
-}
-loop();
+const gameLoop=new GameLoop({state,resolveMission,render,interval:400});
+gameLoop.start();
 setInterval(save,5000);
 window.addEventListener('pagehide',save);
 })();

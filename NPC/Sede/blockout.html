@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blockout &mdash; Sede exploravel</title>
+<style>
+:root{color-scheme:light;--ink:#352316;--cream:#f2e4c9;--gold:#c49342;--wood:#704326}
+*{box-sizing:border-box}body{margin:0;background:#e9ddc6;color:var(--ink);font-family:Georgia,serif;padding:18px}
+main{max-width:1100px;margin:auto}h1{font-size:24px;margin:0 0 6px;color:#714324}
+p{font:14px/1.45 system-ui,sans-serif;margin:0 0 12px;color:#5e503e}
+.frame{background:#f7efdf;border:1px solid #cdbb96;border-radius:12px;padding:10px;box-shadow:0 5px 18px #4c351522}
+svg{display:block;width:100%;height:auto;max-height:760px}
+.zone{cursor:pointer;outline:none}.zone:hover .hotspot,.zone:focus .hotspot{stroke:#ffcf64;stroke-width:5}
+.zone-label{font: bold 18px Georgia;fill:#fff0d0;paint-order:stroke;stroke:#49301d;stroke-width:4px;stroke-linejoin:round}
+.small{font:14px system-ui;fill:#fff1d6;paint-order:stroke;stroke:#49301d;stroke-width:3px}
+#hero{pointer-events:none}
+#hero circle{fill:#d6a64e;stroke:#422b1a;stroke-width:4}
+#hero .cape{fill:#8d3f36;stroke:#422b1a;stroke-width:3}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font:13px system-ui}
+.legend span{background:#eee2ca;border:1px solid #d2c09a;border-radius:20px;padding:5px 10px}
+@media(max-width:600px){body{padding:8px}h1{font-size:20px}.frame{padding:4px}}
+</style></head>
+<body><main>
+<h1>Sede da Guilda &mdash; espaco exploravel</h1>
+<p>Prototipo de navegacao, nao arte final. Clique no piso ou use as setas para caminhar. Clique em uma estacao para se aproximar; pressione Enter para interagir.</p>
+<div class="frame">
+<svg viewBox="0 0 960 650" role="img" aria-label="Planta isomÃ©trica da sede da Guilda com mural, recepÃ§Ã£o, mesa de planejamento e Ã¡rea central livre">
+<defs>
+<linearGradient id="floor" x2="0" y2="1"><stop stop-color="#d6b27b"/><stop offset="1" stop-color="#a87548"/></linearGradient>
+<linearGradient id="wall" x2="0" y2="1"><stop stop-color="#ead8b6"/><stop offset="1" stop-color="#c6a77b"/></linearGradient>
+<pattern id="boards" width="48" height="20" patternUnits="userSpaceOnUse"><path d="M0 1H48M0 19H48" stroke="#76502f" stroke-opacity=".38"/><path d="M24 1V19" stroke="#76502f" stroke-opacity=".18"/></pattern>
+</defs>
+<!-- walls and room shell -->
+<polygon points="110,170 480,40 850,170 480,300" fill="#71452c" stroke="#432a1b" stroke-width="8"/>
+<polygon points="110,170 480,300 480,390 110,260" fill="url(#wall)" stroke="#543720" stroke-width="7"/>
+<polygon points="480,300 850,170 850,260 480,390" fill="#d8c29d" stroke="#543720" stroke-width="7"/>
+<polygon points="110,260 480,390 850,260 850,170 480,300 110,170" fill="none"/>
+<!-- floor -->
+<polygon id="walkfloor" points="110,260 480,390 850,260 480,130" fill="url(#floor)" stroke="#573820" stroke-width="8"/>
+<polygon points="110,260 480,390 850,260 480,130" fill="url(#boards)" opacity=".65"/>
+<!-- floor perspective seams -->
+<g stroke="#744a2a" stroke-opacity=".42" stroke-width="2"><path d="M185 286L555 156M260 312L630 182M335 338L705 208M410 364L780 234"/><path d="M202 228L572 358M294 196L664 326M386 163L756 293"/></g>
+<!-- back banners -->
+<g><path d="M430 66L460 56L460 116L445 130L430 116Z" fill="#873d35" stroke="#4b2d20" stroke-width="3"/><path d="M500 56L530 66L530 116L515 130L500 116Z" fill="#873d35" stroke="#4b2d20" stroke-width="3"/><path d="M445 76L445 112M515 76L515 112" stroke="#d6ac5e" stroke-width="4"/></g>
+<!-- quest board left wall -->
+<g class="zone" tabindex="0" role="button" aria-label="Mural de contratos" data-name="Mural de contratos">
+<polygon class="hotspot" points="165,196 260,229 260,285 165,252" fill="#704326" stroke="#442a1b" stroke-width="4"/>
+<polygon points="177,201 249,226 249,268 177,243" fill="#d5b77f" stroke="#42291b" stroke-width="3"/>
+<g fill="#f1dfb8" stroke="#8c633b" stroke-width="2"><path d="M188 210L207 217L207 239L188 232Z"/><path d="M216 220L237 227L237 249L216 242Z"/></g>
+<text class="zone-label" x="150" y="165">CONTRATOS</text>
+</g>
+<!-- reception right wall -->
+<g class="zone" tabindex="0" role="button" aria-label="BalcÃ£o de recepÃ§Ã£o" data-name="RecepÃ§Ã£o">
+<polygon class="hotspot" points="660,251 773,211 823,229 710,270" fill="#86512d" stroke="#4b2d1b" stroke-width="4"/>
+<polygon points="660,251 710,270 710,309 660,290" fill="#62391f" stroke="#4b2d1b" stroke-width="3"/>
+<polygon points="710,270 823,229 823,267 710,309" fill="#754526" stroke="#4b2d1b" stroke-width="3"/>
+<polygon points="660,251 773,211 823,229 710,270" fill="#c18b4d" stroke="#4b2d1b" stroke-width="3"/>
+<text class="zone-label" x="720" y="185">RECEPCAO</text>
+</g>
+<!-- planning table rear -->
+<g class="zone" tabindex="0" role="button" aria-label="Mesa de planejamento" data-name="Planejamento">
+<polygon class="hotspot" points="422,190 500,163 574,189 496,218" fill="#704326" stroke="#43291a" stroke-width="4"/>
+<path d="M442 198L442 231M555 194L555 227M495 217L495 250" stroke="#56351e" stroke-width="9"/>
+<polygon points="447,190 500,173 550,190 497,208" fill="#d7c18d" stroke="#5b3a21" stroke-width="3"/>
+<path d="M470 189L503 179L527 189L494 200Z" fill="#7c9b83" stroke="#72502d" stroke-width="2"/>
+<text class="zone-label" x="415" y="145">PLANEJAMENTO</text>
+</g>
+<!-- fireplace left rear -->
+<g><polygon points="290,142 355,120 390,132 325,156" fill="#70442a" stroke="#432a1a" stroke-width="3"/><polygon points="325,156 390,132 390,190 325,214" fill="#9c6538" stroke="#432a1a" stroke-width="3"/><path d="M348 193Q332 171 352 158Q354 174 365 178Q379 159 372 148Q397 177 375 194Z" fill="#d68b38"/></g>
+<!-- clear walking paths overlay -->
+<polygon points="250,260 480,210 700,260 480,340" fill="#f8e5b4" opacity=".08" stroke="#f7e4b4" stroke-dasharray="8 8" stroke-width="3"/>
+<text class="small" x="415" y="290">AREA LIVRE</text>
+<!-- movable adventurer -->
+<g id="hero" transform="translate(480 285)"><ellipse cx="0" cy="13" rx="17" ry="7" fill="#432a1b" opacity=".35"/><path class="cape" d="M-12 -3L0 -20L13 -3L9 9L-9 9Z"/><circle cx="0" cy="-22" r="9"/></g>
+<text class="small" x="430" y="370">Setas ou clique para caminhar</text>
+</svg>
+</div>
+<div class="legend"><span>Contratos</span><span>Recepcao</span><span>Planejamento</span><span>Aventureiro</span><span>Caminho automatico e colisoes</span></div>
+<p id="status" aria-live="polite">Aventureiro no centro do salao. As zonas sao selecionaveis e o piso aceita movimento.</p>
+</main>
+<script src="sede-navigation.js"></script>
+<script>
+const svg=document.querySelector('svg'),status=document.querySelector('#status');
+let pendingZone=null,nearZone=null;
+const approaches={contracts:{x:300,y:300},reception:{x:600,y:290},planning:{x:480,y:270}};
+const guildaNavigator=GuildaSedeNavigation.createNavigator({svg,hero:document.querySelector('#hero'),status,speed:190,onArrive:()=>{if(pendingZone){nearZone=pendingZone;status.textContent='Voce esta perto de '+pendingZone.dataset.zone+'. Pressione Enter para interagir.';pendingZone=null;}}});
+window.guildaNavigator=guildaNavigator;
+const zones=document.querySelectorAll('.zone');
+zones.forEach((zone,index)=>zone.dataset.zone=['contracts','reception','planning'][index]);
+const zoneMessages={
+ 'contracts':'Mural de contratos: aqui o jogador consultara e aceitara missoes disponiveis.',
+ 'reception':'Recepcao: ponto de atendimento da Guilda, recrutamento e gestao dos aventureiros.',
+ 'planning':'Mesa de planejamento: preparacao de expedicoes e visao do mapa da regiao.'
+};
+function interactWithZone(zone){
+ const key=zone.dataset.zone;
+ status.textContent=zoneMessages[key]||'Estacao da Guilda.';
+ nearZone=null;pendingZone=null;
+}
+function approachZone(zone){
+ const key=zone.dataset.zone,target=approaches[key];
+ if(!target)return;
+ pendingZone=zone;nearZone=null;
+ svg.focus();if(!guildaNavigator.moveTo(target))pendingZone=null;
+}svg.addEventListener('click',e=>{
+ const zone=e.target.closest('.zone');
+ if(zone){approachZone(zone);return;}
+ nearZone=null;pendingZone=null;
+ const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;
+ const q=p.matrixTransform(svg.getScreenCTM().inverse());
+ guildaNavigator.moveTo({x:q.x,y:q.y});
+});
+document.querySelectorAll('.zone').forEach(z=>z.addEventListener('keydown',e=>{
+ if(e.key==='Enter'||e.key===' '){e.preventDefault();if(nearZone===z)interactWithZone(z);else approachZone(z);}
+}));
+svg.addEventListener('keydown',e=>{if(e.key==='Enter'&&nearZone){e.preventDefault();interactWithZone(nearZone);return;}
+ const moves={ArrowLeft:[-40,0],ArrowRight:[40,0],ArrowUp:[0,-30],ArrowDown:[0,30]};
+ if(!moves[e.key])return;
+ e.preventDefault();nearZone=null;pendingZone=null;const [dx,dy]=moves[e.key],p=guildaNavigator.getPosition();
+ guildaNavigator.moveTo({x:p.x+dx,y:p.y+dy});
+});
+</script></body></html>
