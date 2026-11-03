@@ -278,3 +278,14 @@ Preparar a base existente para versionamento e hospedagem estática, sem publica
 
 ## Próxima etapa recomendada
 Após autorização para criar/conectar o repositório GitHub, revisar cuidadosamente o diff e os arquivos não rastreados para separar conteúdo canônico de backups e experimentos; então criar o remoto e publicar somente o conjunto aprovado. Em seguida, importar na Vercel, configurar Framework Preset Other, Root Directory ., build desativado e Output Directory ., e verificar a rota /, módulos e spritesheets no ambiente publicado.
+
+
+## Resultado da publicação inicial — 2026-11-03
+
+- Stage revisado e commitado: 70 arquivos, incluindo jogo, módulos, testes, assets, documentação, configuração da Vercel e CI. Backups da pasta Planejamento/Arquivo/Backups/ foram ignorados; os dois backups históricos já ausentes da raiz permaneceram fora do stage e suas cópias preservadas no arquivo local.
+- Commit: `4f5b793` (`chore: prepare Guilda for GitHub and Vercel`).
+- Push: concluído para `https://github.com/gcmbiel12-tech/Guilda-dos-Aventureiros.git`, branch `master`; `git ls-remote --heads origin` confirmou `4f5b7932aaf051c259a13ae0e6f02f8ae03f2900`.
+- Testes: `npm test` exit code 0; 292 verificações unitárias/baseline, 13/13 cenários Puppeteer e zero erros de página. `git diff --cached --check` aprovado antes do commit.
+- O workflow `.github/workflows/ci.yml` foi publicado, mas sua execução no GitHub Actions ainda precisa ser observada. Nenhum deploy Vercel foi iniciado.
+- Estado local após push: `master` acompanha `origin/master`; somente duas exclusões locais preexistentes dos backups na raiz permanecem não staged. As cópias dos backups estão preservadas em `Planejamento/Arquivo/Backups/`.
+- Próxima etapa: conectar o repositório à Vercel, configurar projeto estático sem build e validar o deploy e os recursos carregados.

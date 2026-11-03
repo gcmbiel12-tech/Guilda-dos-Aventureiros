@@ -463,3 +463,13 @@ Extrair o estado/serviço da Guilda em escopo controlado para recursos, elenco, 
 - Limitação: workflow GitHub Actions e roteamento Vercel foram configurados localmente, mas ainda não foram executados nos serviços externos. O deploy depende da criação/conexão do repositório remoto e da importação na Vercel.
 - Nota de arquitetura: a persistência permanece em localStorage (guildaSave v2); publicar o site não sincroniza salvamentos entre dispositivos. Backend/autenticação ficam fora desta etapa.
 - Próxima ação: revisar o conjunto de arquivos que deve ser versionado, autorizar a criação/conexão do repositório GitHub e então importar o projeto na Vercel.
+
+
+## Publicação inicial no GitHub — 2026-11-03
+- [x] Stage revisado: 70 arquivos incluídos; os dois backups históricos da raiz foram explicitamente mantidos fora do stage. A pasta Planejamento/Arquivo/Backups/ permanece preservada e ignorada.
+- [x] Commit criado: `4f5b793` — `chore: prepare Guilda for GitHub and Vercel`.
+- [x] Push concluído para `origin/master`; referência remota confirmada em `4f5b7932aaf051c259a13ae0e6f02f8ae03f2900`.
+- [x] Branch local `master` acompanha `origin/master`.
+- [x] `npm test`: 292 verificações unitárias/baseline e 13/13 regressões Puppeteer; zero erros de página; exit code 0. `git diff --cached --check` passou antes do commit.
+- Estado local posterior: somente duas exclusões preexistentes dos backups na raiz continuam não staged; as cópias estão preservadas em Planejamento/Arquivo/Backups/. Nenhuma outra alteração de trabalho ficou pendente.
+- Pendências: validar GitHub Actions no primeiro push (workflow já enviado), conectar/importar o repositório na Vercel, executar deploy e testar rota principal, módulos e spritesheets publicados.
